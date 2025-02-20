@@ -238,6 +238,9 @@ app.post('/logout', (req, res) => {
 
 //forget password
 
+app.get("/",(req,res)=>{
+  res.redirect("/login");
+})
 
 // Reset Password Endpoint
 
