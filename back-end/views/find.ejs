@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .main-container{
+            display: flex;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        .card{
+            width: 300px;
+            height:auto;
+            background-color: red;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+        .main-img{
+            height: 300px;
+            width:300px ;
+        }
+        .del{
+                display: flex;
+                gap: 5px;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>find your lost thing !</h1>
+    <div class="main-container">
+        <% find.forEach(user => { %>
+        <div class="card">
+            <div class="main-img">
+                <div class="image-container"></div>
+            </div>
+            <div class="del">
+                <div class="description"><%= user.Message %></div>
+                <div class="contact"><%= user.Phone %></div>
+                <div class="reward"><%= user.Mail %></div>
+            </div>
+
+        </div>
+        <% })%>
+    </div>
+</body>
+</html>

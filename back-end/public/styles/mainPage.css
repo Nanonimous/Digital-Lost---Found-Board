@@ -1,0 +1,12 @@
+*{
+    padding: none;
+    margin: none;
+    box-sizing: border-box;
+}
+
+
+.main-container{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
