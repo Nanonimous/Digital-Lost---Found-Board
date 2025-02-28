@@ -22,9 +22,10 @@ const userSchema = new mongoose.Schema({
     type:String,
     required:true
   },
-  profile_photo:{
-    type:Buffer,
-  },
+  profile_photo: {
+    data: Buffer,
+    contentType: String
+}
 
 });
 

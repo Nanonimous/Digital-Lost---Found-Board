@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
+import User from './modals/lost.js';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import { MongoClient, ServerApiVersion,ObjectId } from 'mongodb';
@@ -192,39 +193,47 @@ app.post('/login', sanitizeInput, async (req, res) => {
 app.get("/mainPage",(req,res)=>{
   res.render("lost-fount.ejs");
 })
-import User from './modals/lost.js';
-const createUser = async (item) => {
 
-    const newUser = new User(item);
-try {
-    const savedUser = await newUser.save();  // Save the new user to the database
-    console.log('New user saved:', savedUser);
-    // console.log("running")
+const createUser = async (item, file) => {
 
-  } catch (error) {
-    console.error('Error saving user:', error);
-  } 
- 
+  let x = {
+    ...item,
+    profile_photo: {
+        data: file.buffer,
+        contentType: file.mimetype
+    }
+}
+  const newUser = new User(x);
+  console.log(x)
+  return newUser.save();
 };
-app.post("/submit-lost",upload.single("profile_photo"),(req,res)=>{
-  const del = req.body;
-  const image = req.file;
-  del.profile_photo = image;
-  createUser(del);
-  console.log(del);
-  res.redirect("/find")
-})
 
-app.get("/find", async (req,res)=>{
+app.post("/submit-lost", upload.single("profile_photo"), async (req, res) => {
+  console.log("Body:", req.body);
+  console.log("File:", req.file);
+
   try {
-    const details = await User.find(); // Fetch all documents
+    await createUser(req.body, req.file);
+    return res.redirect("/find");  // ✅ Ensure only one response
+  } catch (error) {
+    console.error("Error saving user:", error);
+    return res.status(500).send("Error saving user.");  // ✅ Handle errors properly
+  }
+});
+
+
+
+app.get("/find", async (req, res) => {
+  try {
+    const details = await User.find();
     console.log(details);
-    res.render("find.ejs",{find : details});
+    res.render("find.ejs", { find: details }); // ✅ Only one response
   } catch (err) {
     console.error(err);
+    res.status(500).send("Error fetching details.");
   }
-  res.render("find.ejs");
-})
+});
+
 
 app.get("/lost",(req,res)=>{
   res.sendFile(path.join(__dirname, "public", "html/lost.html"))

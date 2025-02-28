@@ -35,10 +35,23 @@
 <body>
     <h1>find your lost thing !</h1>
     <div class="main-container">
+        <% if (locals.find && locals.find.length > 0) { %>
         <% find.forEach(user => { %>
         <div class="card">
             <div class="main-img">
-                <div class="image-container"></div>
+                <div class="image-container">
+                    <% if (user.profile_photo && user.profile_photo.data) { %>
+                        <img 
+                          src="data:image/jpeg;base64,<%= user.profile_photo.data.toString('base64') %>" 
+                          alt="Lost Item" 
+                          class="rounded-3"
+                          width="300" 
+                          height="300"
+                        />
+                    <% } else { %>
+                        <p>No image available</p>
+                    <% } %>
+                </div>
             </div>
             <div class="del">
                 <div class="description"><%= user.Message %></div>
@@ -47,7 +60,10 @@
             </div>
 
         </div>
-        <% })%>
+        <% }); %>
+        <% } else { %>
+            <p>No records found.</p>
+        <% } %>
     </div>
 </body>
 </html>
